@@ -47,6 +47,15 @@
       width: 122px;
     }
   </style>
+
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  <script>
+    window.TrackJS && TrackJS.install({
+      token: "b3138746c471450799d60992afd833fd"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+  </script>
+
 </head>
 
 <body>
@@ -96,12 +105,108 @@
       let secondNum = document.querySelector('#second-num').value;
       let operator = document.querySelector('#operator').value;
       output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+
+      // Test the function
+      let result = addObjects(5, 10); // Works fine
+      console.log(result); // Outputs: 15
+
+      result = addObjects({}, "string"); // Throws an error
+
     });
+
+    document.querySelector('#first-num').addEventListener('change', () => {
+      try {
+        if (isNaN(parseInt(document.querySelector('#first-num').value))) {
+          throw new SumError("Incorrect type for addition");
+        }
+      } catch (error) {
+        console.error("Error:", error.message);
+      } finally {
+        console.log("Checked input 1")
+      }
+    })
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
 
-    // Start your code here
-    // You may move this JS to another file if you wish
+    errorBtns[0].addEventListener('click', () => {
+      console.log("Console log demo");
+    });
+
+    errorBtns[1].addEventListener('click', () => {
+      console.error("Console error demo");
+    });
+
+    errorBtns[2].addEventListener('click', () => {
+      console.count("Console count button");
+    });
+
+    errorBtns[3].addEventListener('click', () => {
+      console.warn("Console warn demo");
+    });
+
+    errorBtns[4].addEventListener('click', () => {
+      console.assert(0 == true, "0 is not true");
+    });
+
+    errorBtns[5].addEventListener('click', () => {
+      console.clear();
+    });
+
+    errorBtns[6].addEventListener('click', () => {
+      console.dir(errorBtns);
+    });
+
+    errorBtns[7].addEventListener('click', () => {
+      console.dirxml(errorBtns[7]);
+    });
+
+    errorBtns[8].addEventListener('click', () => {
+      console.group("New group");
+    });
+
+    errorBtns[9].addEventListener('click', () => {
+      console.groupEnd();
+    });
+
+    errorBtns[10].addEventListener('click', () => {
+      console.table([{ composer: "Beethoven", period: "Classical" }, { composer: "Debussy", period: "Impressionistic" }]);
+    });
+
+    errorBtns[11].addEventListener('click', () => {
+      console.time();
+    });
+
+    errorBtns[12].addEventListener('click', () => {
+      console.timeEnd();
+    });
+
+    const tracer = function () {
+      const tracing = () => {
+        console.trace();
+      };
+
+      errorBtns[13].addEventListener('click', tracing);
+    };
+
+    tracer();
+
+    errorBtns[14].addEventListener('click', () => {
+      throw new Error("This is a global error.");
+    });
+
+    class SumError extends Error {
+      constructor(message) {
+        super(message);
+        this.name = "SumError";
+      }
+    }
+
+    window.onerror = (message) => {
+      console.log("An error has occurred :(");
+      TrackJS.track('Testing TrackJS!');
+    };
+
+
   </script>
 </body>
 
